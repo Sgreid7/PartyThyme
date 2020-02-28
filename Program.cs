@@ -27,7 +27,7 @@ namespace PartyThyme
         Console.WriteLine("What would you like to do today?");
         Console.WriteLine("------------------------------------");
         Console.WriteLine("(VIEW 'v') all plants, (PLANT 'p') a plant, (REMOVE 'r') a plant, (WATER 'w') a plant, ");
-        Console.WriteLine("(VIEW 'n') plants not watered today, (LOCATION 'l') summary, or (QUIT 'q')");
+        Console.WriteLine("(VIEW 'n') plants not watered today, (VIEW 'x') plants that need water, (LOCATION 'l') summary, or (QUIT 'q')");
         // GET USER INPUT AND CREATE SWITCH STATEMENT FOR OPTIONS ABOVE
         var input = Console.ReadLine().ToLower();
         // Add space
@@ -118,6 +118,7 @@ namespace PartyThyme
               LocatedPlant = location,
               PlantedDate = plantedDate,
               LastWateredDate = lastWateredDate,
+              // WateringFrequency = DateTime.Today - lastWateredDate,
               LightNeeded = sunlightNeeded,
               WaterNeeded = waterNeeded
             };
@@ -215,14 +216,20 @@ namespace PartyThyme
             var plantsNotWateredToday = db.Plants.Where(p => p.LastWateredDate != DateTime.Today);
             foreach (var p in plantsNotWateredToday)
             {
-              System.Console.WriteLine("-------------------------------------------");
+              Console.WriteLine("-----------------------------------------------------------------");
               Console.WriteLine($"Species: {p.Species}");
               Console.WriteLine($"Last time watered: {p.LastWateredDate.ToString("MMMM dd, yyyy")}");
-              System.Console.WriteLine("-------------------------------------------");
+              Console.WriteLine("-----------------------------------------------------------------");
             }
             db.SaveChanges();
             // Add space 
             Console.WriteLine();
+            break;
+
+          case "x":
+            // Check to see if plants need to be watered
+
+
             break;
 
           // * * * * * VIEW plants given a location * * * * *
@@ -236,7 +243,7 @@ namespace PartyThyme
             // Validate to see if location exists in database
             while (!db.Plants.Any(l => l.LocatedPlant == chosenLocation))
             {
-              System.Console.WriteLine(errorMessage);
+              Console.WriteLine(errorMessage);
               chosenLocation = Console.ReadLine().ToLower();
             }
             // Filter plants to the specific location
